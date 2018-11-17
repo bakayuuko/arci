@@ -22,7 +22,23 @@ timedatectl set-ntp true
 # update mirrorlist 
 pacman -Sy pacman-contrib --noconfirm
 echo "--Ranking mirrors--"
-curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist.id
+# change Arch Linux repo to Indonesia repository
+#curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
+cat << CONF > /etc/pacman.d/mirrorlist
+#kambing
+Server = http://kambing.ui.ac.id/archlinux/$repo/os/$arch
+#subaya
+Server = http://suro.ubaya.ac.id/archlinux/$repo/os/$arch
+#kambing
+Server = http://kambing.ui.ac.id/archlinux/$repo/os/$arch
+#poliwangi
+Server = http://mirror.poliwangi.ac.id/archlinux/$repo/os/$arch
+#subaya
+Server = http://suro.ubaya.ac.id/archlinux/$repo/os/$arch
+#kambing
+Server = http://kambing.ui.ac.id/archlinux/$repo/os/$arch
+CONF
+
 
 pacman -Syy 
 pacstrap /mnt $(pacman -Sqg base | sed 's/^linux$/&-zen/') linux-zen-headers base-devel sudo grub os-prober
