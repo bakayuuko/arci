@@ -4,8 +4,6 @@ echo "User name:"
 read USER
 echo "Password:"
 read PASSWORD
-echo "Hostname:"
-read HOSTNAME
 
 START=`date +%s`
 
@@ -23,7 +21,7 @@ timedatectl set-ntp true
 pacman -Sy pacman-contrib --noconfirm
 echo "--Ranking mirrors--"
 # change Arch Linux repo to Indonesia repository
-curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
+curl -s "https://www.archlinux.org/mirrorlist/?country=JP&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
 
 pacman -Syy 
 pacstrap /mnt $(pacman -Sqg base | sed 's/^linux$/&-zen/') linux-zen-headers base-devel sudo grub os-prober
@@ -40,7 +38,7 @@ chroot_actions(){
     hwclock --systohc
 
     # hosts
-    hostname="$3"
+    hostname=nanolab
     echo $hostname > /etc/hostname
     echo "127.0.0.1 localhost.localdomain localhost" > /etc/hosts
     echo "::1       localhost.localdomain localhost" >> /etc/hosts
