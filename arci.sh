@@ -5,8 +5,6 @@ read USER
 echo "Password:"
 read PASSWORD
 
-START=`date +%s`
-
 # Prepare disk
 yes | mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
@@ -21,7 +19,7 @@ timedatectl set-ntp true
 pacman -Sy pacman-contrib --noconfirm
 echo "--Ranking mirrors--"
 # change Arch Linux repo to Indonesia repository
-curl -s "https://www.archlinux.org/mirrorlist/?country=JP&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
+curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
 
 pacman -Syy 
 pacstrap /mnt $(pacman -Sqg base | sed 's/^linux$/&-zen/') linux-zen-headers base-devel sudo grub os-prober
@@ -63,6 +61,11 @@ chroot_actions(){
     pacman -S xf86-input-synaptics --noconfirm
     pacman -S xf86-video-intel --noconfirm
     pacman -S acpi --noconfirm
+    pacman -S tlp  tlp-rdw --noconfirm
+    systemctl enable tlp.service
+    systemctl enable tlp-sleep.service
+    systemctl mask systemd-rfkill.service
+    systemctl mask systemd-rfkill.socket
 
     #  UI
     pacman -S gvfs gvfs-smb gvfs-mtp polkit-gnome --noconfirm
@@ -138,6 +141,12 @@ chroot_actions(){
     echo "Server = https://raw.github.com/spookykidmm/spooky_aur/master/x86_64" >> /etc/pacman.conf
     pacman -Syy
     pacman -S yay --noconfirm
+
+    # Install yay
+    echo "[herecura]" >> /etc/pacman.conf
+    echo "Server = https://repo.herecura.be/$repo/$arch" >> /etc/pacman.conf
+    pacman -Syy
+    pacman -S vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs --noconfirm
 
     # grub
     grub-install --recheck --target=i386-pc /dev/sda
