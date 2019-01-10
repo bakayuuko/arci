@@ -6,10 +6,10 @@ echo "Password:"
 read PASSWORD
 
 # Prepare disk
-yes | mkfs.ext4 /dev/sda2
-mount /dev/sda2 /mnt
-yes | mkswap /dev/sda3
-swapon /dev/sda3
+yes | mkfs.ext4 /dev/sda1
+mount /dev/sda1 /mnt
+yes | mkswap /dev/sda2
+swapon /dev/sda2
 
 
 # sync time:
@@ -83,8 +83,8 @@ chroot_actions(){
     pacman -S xterm --noconfirm
     pacman -S ntp --noconfirm
     systemctl enable ntpd.service
-    pacman -S openssh --noconfirm
-    systemctl enable sshd.service
+    #pacman -S openssh --noconfirm
+    #systemctl enable sshd.service
 
     # network
     systemctl enable dhcpcd.service
@@ -144,7 +144,7 @@ chroot_actions(){
 
     # Install yay
     echo "[herecura]" >> /etc/pacman.conf
-    echo "Server = https://repo.herecura.be/$repo/$arch" >> /etc/pacman.conf
+    echo "Server = https://repo.herecura.be/herecura/$arch" >> /etc/pacman.conf
     pacman -Syy
     pacman -S vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs --noconfirm
 
