@@ -153,6 +153,12 @@ chroot_actions(){
     echo "Server = https://raw.github.com/spookykidmm/spooky_aur/master/x86_64" >> /etc/pacman.conf
     pacman -Syy
     pacman -S yay --noconfirm
+    
+    # Add herecura repo
+    echo "[herecura]" >> /etc/pacman.conf
+    echo "Server = https://repo.herecura.be/herecura/x86_64" >> /etc/pacman.conf
+    pacman -Syy
+    pacman -S opera-beta opera-beta-ffmpeg-codecs --noconfirm
 
     # grub
     grub-install --recheck --target=i386-pc /dev/sda
