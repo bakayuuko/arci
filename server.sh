@@ -92,8 +92,11 @@ chroot_actions(){
     pacman -S broadcom-wl-dkms --noconfirm
     pacman -S networkmanager --noconfirm
     pacman -S dhcp --noconfirm
+    systemctl enable dhcpd4.service
     pacman -S tftp-hpa --noconfirm
+    systemctl enable tftpd.service
     pacman -S nfs-utils --noconfirm
+    systemctl enable nfs-server.service
     pacman -S devtools --noconfirm
     pacman -S arch-install-scripts --noconfirm
     pacman -S btrfs-progs --noconfirm
@@ -133,9 +136,9 @@ chroot_actions(){
     # cli programming
     pacman -S go go-tools ruby --noconfirm
     
-    # virtualbox
-    pacman virtualbox-host-dkms --noconfirm
-    pacman virtualbox --noconfirm
+    # virtual
+    #pacman virt-manager qemu vde2 ebtables dnsmasq bridge-utils openbsd-netcat --noconfirm
+    #sudo systemctl enable libvirtd.service
 
     # extra
     pacman -S compton --noconfirm
