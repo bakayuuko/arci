@@ -99,8 +99,7 @@ chroot_actions(){
     systemctl enable nfs-server.service
     pacman -S devtools --noconfirm
     pacman -S arch-install-scripts --noconfirm
-    pacman -S btrfs-progs --noconfirm
-
+    
     # sound
     pacman -S pulseaudio --noconfirm
     pacman -S pulseaudio-alsa --noconfirm
