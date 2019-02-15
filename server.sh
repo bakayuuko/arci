@@ -22,7 +22,7 @@ echo "--Ranking mirrors--"
 curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
 
 pacman -Syy 
-pacstrap /mnt $(pacman -Sqg base | sed 's/^linux$/&-zen/') linux-zen-headers base-devel sudo grub os-prober
+pacstrap /mnt base base-devel sudo grub os-prober
 genfstab -U /mnt >> /mnt/etc/fstab
 
 chroot_actions(){
@@ -79,7 +79,7 @@ chroot_actions(){
     systemctl enable lightdm
 	
     # system
-    pacman -S rxvt-unicode --noconfirm
+    pacman -S ttf-bitstream-vera rxvt-unicode --noconfirm
     pacman -S xterm --noconfirm
     pacman -S ntp --noconfirm
     systemctl enable ntpd.service
