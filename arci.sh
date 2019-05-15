@@ -144,7 +144,7 @@ chroot_actions(){
 
     # Install yay
     echo "[herecura]" >> /etc/pacman.conf
-    echo "Server = https://repo.herecura.be/herecura/$arch" >> /etc/pacman.conf
+    echo "Server = https://repo.herecura.be/herecura/x86_64" >> /etc/pacman.conf
     pacman -Syy
     pacman -S vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs --noconfirm
 
