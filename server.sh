@@ -22,7 +22,7 @@ echo "--Ranking mirrors--"
 curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
 
 pacman -Syy 
-pacstrap /mnt base base-devel sudo grub os-prober
+pacstrap /mnt $(pacman -Sqg base | sed 's/^linux$/&-lts/') linux-lts-headers base-devel sudo grub os-prober
 genfstab -U /mnt >> /mnt/etc/fstab
 
 chroot_actions(){
@@ -51,7 +51,7 @@ chroot_actions(){
     echo 'root ALL=(ALL) ALL' > /etc/sudoers
     echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
 
-    # coding
+   # coding
     pacman -S git --noconfirm
     pacman -S python python2 --noconfirm
 
@@ -79,27 +79,23 @@ chroot_actions(){
     systemctl enable lightdm
 	
     # system
-    pacman -S ttf-bitstream-vera rxvt-unicode --noconfirm
+    pacman -S rxvt-unicode --noconfirm
     pacman -S xterm --noconfirm
     pacman -S ntp --noconfirm
     systemctl enable ntpd.service
+    #pacman -S openssh --noconfirm
+    #systemctl enable sshd.service
 
     # network
+    systemctl enable dhcpcd.service
     pacman -S dialog --noconfirm
     pacman -S wpa_supplicant --noconfirm
     pacman -S wpa_actiond --noconfirm
     pacman -S wireless_tools --noconfirm
     pacman -S broadcom-wl-dkms --noconfirm
     pacman -S networkmanager --noconfirm
-    pacman -S dhcp --noconfirm
-    systemctl enable dhcpd4.service
-    pacman -S tftp-hpa --noconfirm
-    systemctl enable tftpd.service
-    pacman -S nfs-utils --noconfirm
-    systemctl enable nfs-server.service
-    pacman -S devtools --noconfirm
-    pacman -S arch-install-scripts --noconfirm
-    
+    systemctl enable NetworkManager.service
+
     # sound
     pacman -S pulseaudio --noconfirm
     pacman -S pulseaudio-alsa --noconfirm
@@ -131,13 +127,6 @@ chroot_actions(){
     pacman -S mpc --noconfirm
     pacman -S mpv --noconfirm
     pacman -S ncmpcpp --noconfirm
-    
-    # cli programming
-    pacman -S go go-tools ruby --noconfirm
-    
-    # virtual
-    #pacman virt-manager qemu vde2 ebtables dnsmasq bridge-utils openbsd-netcat --noconfirm
-    #sudo systemctl enable libvirtd.service
 
     # extra
     pacman -S compton --noconfirm
@@ -145,19 +134,12 @@ chroot_actions(){
     pacman -S python-pywal python-setuptools --noconfirm
     pacman -S zsh --noconfirm
     chsh -s /usr/bin/zsh
-	
+
     # Install yay
-    echo "[spooky_aur]" >> /etc/pacman.conf
-    echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf
-    echo "Server = https://raw.github.com/spookykidmm/spooky_aur/master/x86_64" >> /etc/pacman.conf
-    pacman -Syy
-    pacman -S yay --noconfirm
-    
-    # Add herecura repo
     echo "[herecura]" >> /etc/pacman.conf
     echo "Server = https://repo.herecura.be/herecura/x86_64" >> /etc/pacman.conf
     pacman -Syy
-    pacman -S opera-beta opera-beta-ffmpeg-codecs --noconfirm
+    pacman -S vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs --noconfirm
 
     # grub
     grub-install --recheck --target=i386-pc /dev/sda
