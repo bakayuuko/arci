@@ -19,7 +19,7 @@ timedatectl set-ntp true
 pacman -Sy pacman-contrib --noconfirm
 echo "--Ranking mirrors--"
 # change Arch Linux repo to Indonesia repository
-curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
+#curl -s "https://www.archlinux.org/mirrorlist/?country=ID&protocol=http&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - > /etc/pacman.d/mirrorlist
 
 pacman -Syy 
 pacstrap /mnt $(pacman -Sqg base | sed 's/^linux$/&-lts/') linux-lts-headers base-devel sudo grub os-prober
